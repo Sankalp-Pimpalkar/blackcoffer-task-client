@@ -9,8 +9,6 @@ const backend_url = import.meta.env.VITE_BACKEND_URL;
 
 function App() {
 
-  console.log(backend_url)
-
   return (
     <div className="w-full h-full min-h-screen max-h-fit bg-gray-950">
       <Navbar />

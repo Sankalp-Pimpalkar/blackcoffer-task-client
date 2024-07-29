@@ -27,7 +27,7 @@ function LineChart({ url }) {
 
     useEffect(() => {
         (async () => {
-            let response = await fetch(`/api/linechart?to=${toYear}`);
+            let response = await fetch(`${url}/api/linechart?to=${toYear}`);
             response = await response.json();
 
             const ctx = ref.current.getContext('2d');
