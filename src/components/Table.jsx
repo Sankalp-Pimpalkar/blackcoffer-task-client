@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import Card from './Card';
 import Filter from './Filter';
 
-function Table() {
+function Table({ url }) {
     const [data, setData] = useState([]);
     const [filters, setFilters] = useState({
         topics: '',
@@ -17,7 +18,7 @@ function Table() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                let response = await fetch('/api/table');
+                let response = await fetch(`${url}/api/table`);
                 response = await response.json();
                 setData(response.data);
             } catch (error) {

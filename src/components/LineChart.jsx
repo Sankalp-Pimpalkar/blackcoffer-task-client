@@ -1,20 +1,20 @@
+/* eslint-disable react/prop-types */
 import { Chart, registerables } from 'chart.js';
 import { useEffect, useRef, useState } from 'react';
 import Card from './Card';
 
 Chart.register(...registerables);
 
-function LineChart() {
+function LineChart({ url }) {
     const ref = useRef(null);
     const chartRef = useRef(null);
     const [toYear, setToYear] = useState(2022);
     const [years, setYears] = useState([]);
 
     useEffect(() => {
-        // Fetch available years from the API
         const fetchYears = async () => {
             try {
-                const response = await fetch(`/api/filter?type=end_year`); // Adjust endpoint as necessary
+                const response = await fetch(`${url}/api/filter?type=end_year`);
                 const data = await response.json();
                 setYears(data.data);
             } catch (error) {
@@ -36,7 +36,6 @@ function LineChart() {
                 chartRef.current.destroy();
             }
 
-            // Create chart instance
             chartRef.current = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -64,7 +63,6 @@ function LineChart() {
             });
         })();
 
-        // Cleanup chart instance on unmount
         return () => {
             if (chartRef.current) {
                 chartRef.current.destroy();
@@ -73,7 +71,6 @@ function LineChart() {
     }, [toYear]);
 
     useEffect(() => {
-        // Handle window resize
         const handleResize = () => {
             if (chartRef.current) {
                 chartRef.current.resize();
@@ -82,7 +79,6 @@ function LineChart() {
 
         window.addEventListener('resize', handleResize);
 
-        // Cleanup event listener on unmount
         return () => {
             window.removeEventListener('resize', handleResize);
         };

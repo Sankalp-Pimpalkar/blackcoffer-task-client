@@ -1,21 +1,21 @@
+/* eslint-disable react/prop-types */
 import { Chart, registerables } from 'chart.js';
 import { useEffect, useRef } from 'react';
 import Card from './Card';
 
 Chart.register(...registerables);
 
-function BarGraph() {
+function BarGraph({ url }) {
     const ref = useRef(null);
     const chartRef = useRef(null);
 
     useEffect(() => {
         (async () => {
-            let response = await fetch('/api/barchart');
+            let response = await fetch(`${url}/api/barchart`);
             response = await response.json();
 
             const ctx = ref.current.getContext('2d');
 
-            // Create chart instance
             chartRef.current = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -43,7 +43,6 @@ function BarGraph() {
             });
         })();
 
-        // Cleanup chart instance on unmount
         return () => {
             if (chartRef.current) {
                 chartRef.current.destroy();
@@ -52,7 +51,6 @@ function BarGraph() {
     }, []);
 
     useEffect(() => {
-        // Handle window resize
         const handleResize = () => {
             if (chartRef.current) {
                 chartRef.current.resize();
@@ -61,7 +59,6 @@ function BarGraph() {
 
         window.addEventListener('resize', handleResize);
 
-        // Cleanup event listener on unmount
         return () => {
             window.removeEventListener('resize', handleResize);
         };

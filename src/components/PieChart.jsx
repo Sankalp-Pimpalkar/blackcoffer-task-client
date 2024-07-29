@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Chart, registerables } from 'chart.js';
 import { useEffect, useRef } from 'react';
 import Card from './Card';
@@ -26,13 +27,13 @@ const COLORS = [
     'rgb(255, 20, 147)'
 ];
 
-function PieChart() {
+function PieChart({url}) {
     const ref = useRef(null);
     const chartRef = useRef(null);
 
     useEffect(() => {
         (async () => {
-            let response = await fetch('/api/piechart');
+            let response = await fetch(`${url}/api/piechart`);
             response = await response.json();
 
             const labels = response.data.map(row => row.sector || 'Unknown');
@@ -40,7 +41,6 @@ function PieChart() {
 
             const ctx = ref.current.getContext('2d');
 
-            // Create chart instance
             chartRef.current = new Chart(ctx, {
                 type: 'pie',
                 data: {
@@ -76,7 +76,6 @@ function PieChart() {
     }, []);
 
     useEffect(() => {
-        // Handle window resize
         const handleResize = () => {
             if (chartRef.current) {
                 chartRef.current.resize();
@@ -85,7 +84,6 @@ function PieChart() {
 
         window.addEventListener('resize', handleResize);
 
-        // Cleanup event listener on unmount
         return () => {
             window.removeEventListener('resize', handleResize);
         };
